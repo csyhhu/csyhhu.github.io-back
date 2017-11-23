@@ -15,7 +15,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/09/29/Batch-Normalization/index.html">
 <meta property="og:site_name" content="Chen Shangyu&#39;s Blog">
 <meta property="og:description" content="Internal Covariate ShiftDefinitionDistribution of each layer’s inputs between different mini-batches changes during training, as the parameters of the previous layers change:">
-<meta property="og:updated_time" content="2017-10-19T14:23:03.473Z">
+<meta property="og:updated_time" content="2017-11-09T02:22:19.887Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Batch Normalization">
 <meta name="twitter:description" content="Internal Covariate ShiftDefinitionDistribution of each layer’s inputs between different mini-batches changes during training, as the parameters of the previous layers change:">
@@ -172,7 +172,7 @@
       
          <!--  <iframe src="/pdf/Summary of DNN Binarization.pdf" style="width:850; height:600;" frameborder="0"></iframe> -->
 <h2 id="Internal-Covariate-Shift"><a href="#Internal-Covariate-Shift" class="headerlink" title="Internal Covariate Shift"></a>Internal Covariate Shift</h2><h3 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h3><p>Distribution of each layer’s inputs <strong>between different mini-batches</strong> changes during training, as the parameters of the previous layers change:<br><a id="more"></a> </p>
-<script type="math/tex; mode=display">P\_k(X=x) != P\_{k+1}(X=x)</script><p>where $k$ represents $k$ th mini batches.</p>
+<script type="math/tex; mode=display">P_k(X=x) != P_{k+1}(X=x)</script><p>where $k$ represents $k$ th mini batches.</p>
 <h3 id="Consequence"><a href="#Consequence" class="headerlink" title="Consequence"></a>Consequence</h3><p> This slows down thetraining by requiring lower learning rates and careful parameter initialization, and makes it notoriously hard to train models with saturating nonlinearities. </p>
 
       

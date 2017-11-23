@@ -15,14 +15,14 @@
 <meta property="og:url" content="http://yoursite.com/2017/11/05/Network-Sparsity/index.html">
 <meta property="og:site_name" content="Chen Shangyu&#39;s Blog">
 <meta property="og:description" content="This article is about some methods to sparsify neural network by training. Recently I have read two paper published by Sung Ju Hwang group in ICML 2017. I think these two papers share some ideas. Put">
-<meta property="og:image" content="http://yoursite.com/2017/11/05/img/Research/NetworkSparsity/main_idea.png">
-<meta property="og:image" content="http://yoursite.com/2017/11/05/img/Research/NetworkSparsity/visualization1.png">
-<meta property="og:image" content="http://yoursite.com/2017/11/05/img/Research/NetworkSparsity/visualization_conv.png">
-<meta property="og:updated_time" content="2017-11-05T05:07:38.000Z">
+<meta property="og:image" content="http://yoursite.com/2017/11/05/Network-Sparsity/Network-Sparsity/main_idea.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/05/Network-Sparsity/Network-Sparsity/visualization1.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/05/Network-Sparsity/Network-Sparsity/visualization_conv.png">
+<meta property="og:updated_time" content="2017-11-19T13:30:56.484Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Network Sparsity">
 <meta name="twitter:description" content="This article is about some methods to sparsify neural network by training. Recently I have read two paper published by Sung Ju Hwang group in ICML 2017. I think these two papers share some ideas. Put">
-<meta name="twitter:image" content="http://yoursite.com/2017/11/05/img/Research/NetworkSparsity/main_idea.png">
+<meta name="twitter:image" content="http://yoursite.com/2017/11/05/Network-Sparsity/Network-Sparsity/main_idea.png">
   
     <link rel="alternative" href="/atom.xml" title="Chen Shangyu&#39;s Blog" type="application/atom+xml">
   
@@ -183,7 +183,7 @@
 <li>To do so, enforce network weights at each layer to fit to different sets of input features as much as possible. (exclusive sparsity)</li>
 <li>However, it is not practical nor desirable to restrict each weight to be completely disjoint from others as some features still need to be shared (think about low level features). Therefore introduce an additional group sparsity regularizer based on (2, 1)-norm. (group sparsity)</li>
 </ul>
-<h2 id="Idea-Visiualization"><a href="#Idea-Visiualization" class="headerlink" title="Idea Visiualization"></a>Idea Visiualization</h2><center><img src="../img/Research/NetworkSparsity/main_idea.png" width="400px"></center>
+<h2 id="Idea-Visiualization"><a href="#Idea-Visiualization" class="headerlink" title="Idea Visiualization"></a>Idea Visiualization</h2><center><img src="Network-Sparsity/main_idea.png" width="400px"></center>
 
 <ul>
 <li>Group Sparsity tries to delete input neurons.</li>
@@ -203,18 +203,19 @@
 <p>Also, exclusive sparsity was first introduced in <strong>Multi-task learning</strong>: <a href="https://dennyzhou.github.io/papers/HSVM.pdf" target="_blank" rel="external">Hierarchical Classification via Orthogonal Transfer</a> Maybe can find more details in this paper.</p>
 <h2 id="Optimization"><a href="#Optimization" class="headerlink" title="Optimization"></a>Optimization</h2><p>It uses <strong>Proximal Gradient Descent</strong>:</p>
 <ol>
-<li>First obtains the intermediate solution $\mathbf{W}_{t+\frac{1}{2}}$ by taking a gradient step using the gradient computed on the loss only.</li>
-<li>Then optimize for the regularization term while performing Euclidean projection of it to the solution space:<script type="math/tex; mode=display">\min_{\mathbf{W}_{t+1}} = \{\Omega (\mathbf{W}_{t+\frac{1}{2}})  + \frac{1}{2\lambda} || \mathbf{W}_{t+1} - \mathbf{W}_{t+\frac{1}{2} ||_2^2} \}</script></li>
+<li>First obtains the intermediate solution <script type="math/tex">\mathbf{W}_{t+\frac{1}{2}}</script> by taking a gradient step using the gradient computed on the loss only.</li>
+<li>Then optimize for the regularization term while performing Euclidean projection of it to the solution space:<script type="math/tex; mode=display">\min_{\mathbf{W}_{t+1}} = \{\Omega (\mathbf{W}_{t+\frac{1}{2}})  + \frac{1}{2\lambda} || \mathbf{W}_{t+1} - \mathbf{W}_{t+\frac{1}{2} }||_2^2 \}</script></li>
 </ol>
-<h3 id="Group-Sparsity-proximal-step"><a href="#Group-Sparsity-proximal-step" class="headerlink" title="Group Sparsity proximal step"></a>Group Sparsity proximal step</h3><script type="math/tex; mode=display">f(\mathbf{W}_{t+1}) = \frac{1}{2} ||\mathbf{W}_{t+1} - \mathbf{W}_{t + \frac{1}{2}}||^2_2 + \lambda [\mathbf{W}_{t+ 1}^1, \mathbf{W}_{t+ 1}^2, ... ,\mathbf{W}_{t+ 1}^g]</script><script type="math/tex; mode=display">\frac{\partial f(\mathbf{W}_{t+1})}{\partial \mathbf{W}_{t+1}} = \mathbf{W}_{t+1} - \mathbf{W}_{t + \frac{1}{2}} + \lambda [\frac{\mathbf{W}_{t+1}^1}{||\mathbf{W}_{t+1}^1||_2}, \frac{\mathbf{W}_{t+ 1}^2}{||\mathbf{W}_{t+ 1}^2||_2}, ... ,\frac{\mathbf{W}_{t+ 1}^g}{||\mathbf{W}_{t+ 1}^g||}] = 0</script><p>Finally we get:</p>
-<script type="math/tex; mode=display">\mathbf{W}^{t+1}_{g,i} = \left(1 - \frac{\lambda}{||\mathbf{W}_g||_2} \right)_{+} \mathbf{W}^{t + \frac{1}{2}}_{g,i}</script><h3 id="Exclusive-Sparsity-1"><a href="#Exclusive-Sparsity-1" class="headerlink" title="Exclusive Sparsity"></a>Exclusive Sparsity</h3><script type="math/tex; mode=display">\mathbf{W}^{t+1}_{g,i} = \left(1 - \frac{\lambda ||\mathbf{W}_g||_1}{|w_{g,i}|} \right)_{+} \mathbf{W}^{t+\frac{1}{2}}_{g,i}</script><h2 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h2><h3 id="Visualization—Fully-Connected"><a href="#Visualization—Fully-Connected" class="headerlink" title="Visualization—Fully Connected"></a>Visualization—Fully Connected</h3><center><img src="../img/Research/NetworkSparsity/visualization1.png" width="800px"></center>
+<h3 id="Group-Sparsity-proximal-step"><a href="#Group-Sparsity-proximal-step" class="headerlink" title="Group Sparsity proximal step"></a>Group Sparsity proximal step</h3><p>Set </p>
+<script type="math/tex; mode=display">f(\mathbf{W}_{t+1}) = \frac{1}{2} ||\mathbf{W}_{t+1} - \mathbf{W}_{t + \frac{1}{2}}||^2_2 + \underbrace{\lambda [\mathbf{W}_{t+ 1}^1, \mathbf{W}_{t+ 1}^2, ... ,\mathbf{W}_{t+ 1}^g]}_{\text{Regularizer}}</script><script type="math/tex; mode=display">\frac{\partial f(\mathbf{W}_{t+1})}{\partial \mathbf{W}_{t+1}} = \mathbf{W}_{t+1} - \mathbf{W}_{t + \frac{1}{2}} + \lambda [\frac{\mathbf{W}_{t+1}^1}{||\mathbf{W}_{t+1}^1||_2}, \frac{\mathbf{W}_{t+ 1}^2}{||\mathbf{W}_{t+ 1}^2||_2}, ... ,\frac{\mathbf{W}_{t+ 1}^g}{||\mathbf{W}_{t+ 1}^g||}] = 0</script><p>Finally we get:</p>
+<script type="math/tex; mode=display">\mathbf{W}^{t+1}_{g,i} = \left(1 - \frac{\lambda}{||\mathbf{W}_g||_2} \right)_{+} \mathbf{W}^{t + \frac{1}{2}}_{g,i}</script><h3 id="Exclusive-Sparsity-1"><a href="#Exclusive-Sparsity-1" class="headerlink" title="Exclusive Sparsity"></a>Exclusive Sparsity</h3><script type="math/tex; mode=display">\mathbf{W}^{t+1}_{g,i} = \left(1 - \frac{\lambda ||\mathbf{W}_g||_1}{|w_{g,i}|} \right)_{+} \mathbf{W}^{t+\frac{1}{2}}_{g,i}</script><h2 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h2><h3 id="Visualization—Fully-Connected"><a href="#Visualization—Fully-Connected" class="headerlink" title="Visualization—Fully Connected"></a>Visualization—Fully Connected</h3><center><img src="Network-Sparsity/visualization1.png" width="800px"></center>
 
 <ul>
 <li>Group sparsity regularizer results in the total elimination of certain features.</li>
 <li>Exclusive sparsity regularizer, when used on its own, results in disjoint feature selection for each class.</li>
 <li>When combined, it allows certain degree of feature reuse</li>
 </ul>
-<h3 id="Visualization—Convolution"><a href="#Visualization—Convolution" class="headerlink" title="Visualization—Convolution"></a>Visualization—Convolution</h3><center><img src="../img/Research/NetworkSparsity/visualization_conv.png" width="800px"></center>
+<h3 id="Visualization—Convolution"><a href="#Visualization—Convolution" class="headerlink" title="Visualization—Convolution"></a>Visualization—Convolution</h3><center><img src="Network-Sparsity/visualization_conv.png" width="800px"></center>
 
 <ul>
 <li>Combined group and exclusive sparsity regularizer results in filters that are much sharper than others.</li>
@@ -302,6 +303,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2017/11/13/DomainAdaptionTransferLearning/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Domain Adaption VS Transfer Learning
+        
+      </div>
+    </a>
   
   
     <a href="/2017/10/02/binary-neural-network/" id="article-nav-older" class="article-nav-link-wrap">
