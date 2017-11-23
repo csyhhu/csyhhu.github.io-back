@@ -15,15 +15,15 @@
 <meta property="og:url" content="http://yoursite.com/2017/11/23/paper-NOV19-2017/index.html">
 <meta property="og:site_name" content="Chen Shangyu&#39;s Blog">
 <meta property="og:description" content="Weekly paper reading from Nov 19th - Nov 26th, 2017">
-<meta property="og:image" content="http://yoursite.com/2017/11/23/paper-NOV19-2017/paper-NOV19-2017/architecture_synthesis_flow.png">
-<meta property="og:image" content="http://yoursite.com/2017/11/23/paper-NOV19-2017/paper-NOV19-2017/group_sparsity_regularizer.png">
-<meta property="og:image" content="http://yoursite.com/2017/11/23/paper-NOV19-2017/paper-NOV19-2017/proximal1.png">
-<meta property="og:image" content="http://yoursite.com/2017/11/23/paper-NOV19-2017/paper-NOV19-2017/proximal2.png">
-<meta property="og:updated_time" content="2017-11-23T13:02:16.911Z">
+<meta property="og:image" content="http://yoursite.com/2017/11/23/paper-NOV19-2017/architecture_synthesis_flow.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/23/paper-NOV19-2017/group_sparsity_regularizer.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/23/paper-NOV19-2017/proximal1.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/23/paper-NOV19-2017/proximal2.png">
+<meta property="og:updated_time" content="2017-11-23T13:28:53.393Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Weekly Paper - From Nov 19th, 2017">
 <meta name="twitter:description" content="Weekly paper reading from Nov 19th - Nov 26th, 2017">
-<meta name="twitter:image" content="http://yoursite.com/2017/11/23/paper-NOV19-2017/paper-NOV19-2017/architecture_synthesis_flow.png">
+<meta name="twitter:image" content="http://yoursite.com/2017/11/23/paper-NOV19-2017/architecture_synthesis_flow.png">
   
     <link rel="alternative" href="/atom.xml" title="Chen Shangyu&#39;s Blog" type="application/atom+xml">
   
@@ -176,29 +176,21 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Weekly paper reading from Nov 19th - Nov 26th, 2017<br><a id="more"></a></p>
-<h1 id="NeST-A-Neural-Network-Synthesis-Tool-Based-on-a-Grow-and-Prune-Paradigm"><a href="#NeST-A-Neural-Network-Synthesis-Tool-Based-on-a-Grow-and-Prune-Paradigm" class="headerlink" title="NeST: A Neural Network Synthesis Tool Based on a Grow-and-Prune Paradigm"></a>NeST: A Neural Network Synthesis Tool Based on a Grow-and-Prune Paradigm</h1><h2 id="Paper-in-One-Sentence"><a href="#Paper-in-One-Sentence" class="headerlink" title="Paper in One Sentence:"></a>Paper in One Sentence:</h2><p>自动生成weights, neuron, 以及去边</p>
-<h2 id="Architecture-Flow-in-NeST："><a href="#Architecture-Flow-in-NeST：" class="headerlink" title="Architecture Flow in NeST："></a>Architecture Flow in NeST：</h2><center><img src="paper-NOV19-2017/architecture_synthesis_flow.png" width="1000px"></center>
-NeST begins with an initial seed architecture, typically a sparse and partially connected NN. Then, it utilizes two sequential phases to synthesize the NN: 
+<h1 id="Neural-Discrete-Represesntation-Learning"><a href="#Neural-Discrete-Represesntation-Learning" class="headerlink" title="Neural Discrete Represesntation Learning"></a>Neural Discrete Represesntation Learning</h1><h2 id="Paper-in-One-Sentence"><a href="#Paper-in-One-Sentence" class="headerlink" title="Paper in One Sentence:"></a>Paper in One Sentence:</h2><p>跟VAE很相似，只不过每个sample encode成了一个字典（大matrxi）里面的一个词（即一个向量）。</p>
+<h1 id="NeST-A-Neural-Network-Synthesis-Tool-Based-on-a-Grow-and-Prune-Paradigm"><a href="#NeST-A-Neural-Network-Synthesis-Tool-Based-on-a-Grow-and-Prune-Paradigm" class="headerlink" title="NeST: A Neural Network Synthesis Tool Based on a Grow-and-Prune Paradigm"></a>NeST: A Neural Network Synthesis Tool Based on a Grow-and-Prune Paradigm</h1><h2 id="Paper-in-One-Sentence-1"><a href="#Paper-in-One-Sentence-1" class="headerlink" title="Paper in One Sentence:"></a>Paper in One Sentence:</h2><p>自动生成weights, neuron, 以及去边</p>
+<h2 id="Architecture-Flow-in-NeST："><a href="#Architecture-Flow-in-NeST：" class="headerlink" title="Architecture Flow in NeST："></a>Architecture Flow in NeST：</h2><p><img src="/2017/11/23/paper-NOV19-2017/architecture_synthesis_flow.png" alt=""><br>NeST begins with an initial seed architecture, typically a sparse and partially connected NN. Then, it utilizes two sequential phases to synthesize the NN: </p>
+<ul>
+<li>gradient-based growth phase</li>
+<li>magnitude-based pruning phase</li>
+</ul>
+<h2 id="Gradient-based-Growth"><a href="#Gradient-based-Growth" class="headerlink" title="Gradient-based Growth"></a>Gradient-based Growth</h2><h3 id="Connection-weights-Growth"><a href="#Connection-weights-Growth" class="headerlink" title="Connection (weights) Growth"></a>Connection (weights) Growth</h3><ul>
+<li>Given the initial network, NeST locate the  ‘dormant’  connections that can reduce loss effectively. It evaluates $|\frac{\partial L }{\partial w}|$ as the dormant score for every connection. And activates the connections with large gradient magnitudes.  </li>
+</ul>
+<h1 id="Learning-the-Number-of-Neurons-in-Deep-Networks"><a href="#Learning-the-Number-of-Neurons-in-Deep-Networks" class="headerlink" title="Learning the Number of Neurons in Deep Networks"></a>Learning the Number of Neurons in Deep Networks</h1><h2 id="Paper-in-One-Sentence-2"><a href="#Paper-in-One-Sentence-2" class="headerlink" title="Paper in One Sentence:"></a>Paper in One Sentence:</h2><p>加了一个group sparsity, 训练. Group sparsity regularizer可以一次去掉一个neuron. 这就是所谓的“学出neurons的数量”</p>
+<h2 id="Group-Sparsity-Regularizer"><a href="#Group-Sparsity-Regularizer" class="headerlink" title="Group Sparsity Regularizer"></a>Group Sparsity Regularizer</h2><p><center><img src="/2017/11/23/paper-NOV19-2017/group_sparsity_regularizer.png" alt=""></center></p>
+<h2 id="Proximal-Gradient-Desecnt"><a href="#Proximal-Gradient-Desecnt" class="headerlink" title="Proximal Gradient Desecnt"></a>Proximal Gradient Desecnt</h2><p><center> <img src="/2017/11/23/paper-NOV19-2017/proximal1.png" alt=""></center></p>
+<p><center> <img src="/2017/11/23/paper-NOV19-2017/proximal2.png" alt=""></center></p>
 
-* gradient-based growth phase
-* magnitude-based pruning phase
-
-## Gradient-based Growth
-
-### Connection (weights) Growth
-
-- Given the initial network, NeST locate the  'dormant'  connections that can reduce loss effectively. It evaluates $|\frac{\partial L }{\partial w}|$ as the dormant score for every connection. And activates the connections with large gradient magnitudes.  
-
-# Learning the Number of Neurons in Deep Networks
-
-## Paper in One Sentence:
-加了一个group sparsity, 训练. Group sparsity regularizer可以一次去掉一个neuron. 这就是所谓的“学出neurons的数量”
-
-## Group Sparsity Regularizer
-<center><img src="paper-NOV19-2017/group_sparsity_regularizer.png" width="500px"></center>
-
-<h2 id="Proximal-Gradient-Desecnt"><a href="#Proximal-Gradient-Desecnt" class="headerlink" title="Proximal Gradient Desecnt"></a>Proximal Gradient Desecnt</h2><center><img src="paper-NOV19-2017/proximal1.png" width="400px"></center>
-<center><img src="paper-NOV19-2017/proximal2.png" width="450px"></center>
       
 
       
